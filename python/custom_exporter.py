@@ -12,13 +12,13 @@ logging.basicConfig(
 )
 
 # Setting the arguments
-parser = argparse.ArgumentParser()
+# parser = argparse.ArgumentParser()
 
 # required arg
-parser.add_argument("-d", "--dir", required=True, help="target dir path")
-parser.add_argument("-t", "--time", required=True, help="sleep time", type=int)
-parser.add_argument("-e", "--extension", required=False, help="extension to check")
-args = parser.parse_args()
+# parser.add_argument("-d", "--dir", required=True, help="target dir path")
+# parser.add_argument("-t", "--time", required=True, help="sleep time", type=int)
+# parser.add_argument("-e", "--extension", required=False, help="extension to check")
+# args = parser.parse_args()
 
 
 class CustomExporter:
@@ -46,7 +46,7 @@ class CustomExporter:
     def main(self, metric_name: str, description: str) -> None:
         # exporter_port = int(os.environ.get("EXPORTER_PORT", "9877"))
         self.create_gauge_for_metric(metric_name, description)
-        start_http_server(9877, registry=self.registry)
+        start_http_server(8000, registry=self.registry)
         REGISTRY.register(self.registry)
         while True:
             self.create_gauge_for_metric(metric_name, description)
@@ -68,7 +68,7 @@ class FileExtExporter(CustomExporter):
         return len(file_list)
 
     def main(self):
-        metric_name = f"cust_{self.ext}_files_in{self.dir.replace('/', '_')}_total"
+        metric_name = f"count_{self.ext}_files_in{self.dir.replace('/', '_')}"
         description = f"number of *{self.ext} files in {self.dir}"
         super().main(metric_name, description)
 
@@ -87,12 +87,14 @@ class DirNumExporter(CustomExporter):
         return len(dirs)
 
     def main(self):
-        metric_name = f"cust_dirs_in_{'_'.join(self.dir.split('/')[-2:])}_total"
+        metric_name = f"count_dirs_in_{'_'.join(self.dir.split('/')[-2:])}"
         description = f"number of dirs in {self.dir}"
         super().main(metric_name, description)
 
 
 if __name__ == "__main__":
-    dir_path, sleep_time = args.dir, args.time
+    # dir_path, sleep_time = args.dir, args.time
+    dir_path = "/mnt/DATA/DATA-TEAM/mesh/snu"
+    sleep_time = 10
     c = DirNumExporter(dir_path, sleep_time)
     c.main()

@@ -1,15 +1,15 @@
 FROM python:3.10.11-slim
 
-WORKDIR /custom
 
 RUN apt update
 
-COPY Pipfile Pipfile.lock ./
+COPY ./Pipfile ./Pipfile.lock ./
 RUN pip install --no-cache-dir pipenv && pipenv install --system --deploy --ignore-pipfile
 
-COPY custom custom
+WORKDIR /app
+COPY ./python /app
 
 ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH=/custom
+ENV PYTHONPATH=/python
 
-CMD ["python3", "custom/custom_exporter.py"]
+CMD ["python3", "custom_exporter.py"]
