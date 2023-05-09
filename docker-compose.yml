@@ -136,3 +136,13 @@ services:
       - monitor-net
     labels:
       org.label-schema.group: "monitoring"
+
+  dirinfo:
+    container_name: dirinfo
+    build:
+      context: .
+      dockerfile: python/Dockerfile
+    volumes:
+      - /mnt/DATA:/mnt/DATA
+    networks:
+      - monitor-net

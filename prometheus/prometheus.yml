@@ -34,10 +34,10 @@ scrape_configs:
     static_configs:
       - targets: ['pushgateway:9091']
 
-  - job_name: 'custom_exporter'
+  - job_name: 'dirinfo'
     scrape_interval: 5s
     static_configs:
-      - targets: ['custom_exporter:8000']
+      - targets: ['dirinfo:8000']
 
 alerting:
   alertmanagers:
